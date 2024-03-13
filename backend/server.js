@@ -1,59 +1,44 @@
-const express= require("express");
-const mysql =  require('mysql');
-const cors = require('cors');
+require("dotenv").config();
+const express = require("express");
+const cors = require("cors");
 const app = express();
 app.use(cors());
 app.use(express.json());
+const path = require("path");
+const authRoutes = require("./routes/authRoutes");
+const { connectDB } = require("./middlewares/connectDB");
+const { globalError } = require("./middlewares/errorMiddleware");
+const ApiError = require("./utils/ApiError");
 
-const db = mysql.createConnection({
-  host:"localhost",
-  use: "root",
-password:"",
-database:"signup"
-})
+// connect with database
+connectDB();
 
-app.post("/signup", (req, res) => {
-  const { name, email, password } = req.body; 
+app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
-  const sql = 'INSERT INTO login(`name`, `email`, `password`) VALUES (?, ?, ?)';
-  if (db.state === 'connected') {
-   
-    console.log('connected');}
-  if (db.state === 'disconnected') {
-   
-    console.log('disconnected');
-  }
+// routes
+app.use("/api/v1", authRoutes);
 
-  
-  db.query(sql, [name, email, password], (err, data) => {
-
-    if (err) {
-      console.error(err);
-      return res.json('Error');
-    }
-
-    if (data.length > 0) {
-      return res.json("Success");
-    } else {
-      return res.json("Failed");
-    }
-  });
+// handle all route
+app.all("*", (req, res, next) => {
+  // const error = new Error(`can't find route match this url ${req.originalUrl}`)
+  next(new ApiError(`can't find route match this url ${req.originalUrl}`, 400));
 });
-app.post('/signup' , (req,res)=>{
-  const sql='INSERT INTO login (`name`,`email`,`password`) VALUES(?)'
-const values=[
-  req.body.name,
-  req.body.email,
-  req.body.password
-]
-dp.query(sql,[values],(err,data)=>{
-  if (err){
-    return res.json("ERORR");
-  }
-  return res.json(data);
-})
-})
 
-app.listen(8081, () => {
-  console.log("Listening on port 8081");
+// global error handle middleware
+app.use(globalError);
+
+const PORT = process.env.PORT || 8000;
+app.listen(PORT, () => {
+  console.log(`App listen on port ${PORT}`);
+});
+
+// handle rejection outside express
+process.on("unhandledRejection", (err) => {
+  console.error(`rejection un handle error ${err.name} -> ${err.message}`);
+  // if have a pending request => server close after end it
+  app.close(() => {
+    console.log("shutting down application ...");
+    // close app
+    process.exit(1);
+  });
 });
