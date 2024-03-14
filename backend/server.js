@@ -1,3 +1,4 @@
+require("colors");
 require("dotenv").config();
 const express = require("express");
 const cors = require("cors");
@@ -28,16 +29,18 @@ app.all("*", (req, res, next) => {
 app.use(globalError);
 
 const PORT = process.env.PORT || 8000;
-app.listen(PORT, () => {
-  console.log(`App listen on port ${PORT}`);
+
+const server = app.listen(PORT, "0.0.0.0", (err) => {
+  if (!err) {
+    console.log("app listening on port " + PORT);
+  }
 });
 
-// handle rejection outside express
 process.on("unhandledRejection", (err) => {
-  console.error(`rejection un handle error ${err.name} -> ${err.message}`);
+  console.log(`rejection unhandled error ${err.name} -> ${err.message}`.red);
   // if have a pending request => server close after end it
-  app.close(() => {
-    console.log("shutting down application ...");
+  server.close(() => {
+    console.log("shutting down application ...".red);
     // close app
     process.exit(1);
   });
