@@ -1,5 +1,5 @@
 require('colors');
-const { default: mongoose } = require("mongoose");
+const  mongoose  = require("mongoose");
 const ApiError = require("../utils/ApiError");
 
 exports.connectDB = async () => {
@@ -9,5 +9,6 @@ exports.connectDB = async () => {
   } catch (error) {
     console.log("Error connection in database".red);
     return new ApiError("database error connection", 500);
+    mongoose.disconnect();
   }
 };

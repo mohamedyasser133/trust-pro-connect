@@ -12,6 +12,8 @@ const {
 const router = express.Router();
 
 router.post("/register", registerValidator, register);
+router.post("/Service", registerValidator, register);
+
 router.post("/login", loginValidator, login);
 router.get("/getLoggedUser", protect, getLoggerUser);
 
