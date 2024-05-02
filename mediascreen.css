@@ -1,0 +1,42 @@
+@media only screen and (max-width: 700px) {
+    body {
+      background-color: lightblue;
+    }
+    .web-long{
+        display: none !important;
+    }
+    .about-contan{
+        height: 350px;
+    }
+    .about img{
+        margin-top: 40%;
+        width: 100%;
+    }
+    .testimonial{
+        height: 400PX;
+    }
+    .testimonial-tex{
+        width: 55%;
+        text-align: center;
+    }
+    .testimonial-tex h1{
+        width: 400px;
+    }
+    .testimonial-img{
+        width: 40%;
+    }
+    .testimonial-img img{
+        width: 180px;
+        border-radius: 10px;
+    }
+    .contact input{
+        width: 100%;
+        border-radius: 10px;
+    }
+    .text-center{
+        padding-top: 30px;
+    }
+    .footer-textlast{
+        font-size: 9px;
+    }
+  }

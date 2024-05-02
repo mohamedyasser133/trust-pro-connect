@@ -1,0 +1,48 @@
+// App.js
+import React from 'react';
+import './App.css';
+
+const projects = [
+  {
+    image: 'https://via.placeholder.com/300x200.jpg?text=Commercial+Apartment+1',
+    alt: 'Commercial Apartment 1',
+    link: '#',
+  },
+  {
+    image: 'https://via.placeholder.com/300x200.jpg?text=Commercial+Apartment+2',
+    alt: 'Commercial Apartment 2',
+    link: '#',
+  },
+  // Add more projects here
+];
+
+const Project = ({ image, alt, link }) => {
+  return (
+    <a href={link} className="project-link">
+      <img src={image} alt={alt} className="project-image" />
+    </a>
+  );
+};
+
+const ProjectsGallery = () => {
+  return (
+    <div className="projects-gallery">
+      {projects.map((project, index) => (
+        <div key={index} className="project-item">
+          <Project {...project} />
+        </div>
+      ))}
+    </div>
+  );
+};
+
+const App = () => {
+  return (
+    <div className="App">
+      <h1>Our Projects</h1>
+      <ProjectsGallery />
+    </div>
+  );
+};
+
+export default App;
